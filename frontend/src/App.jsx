@@ -15,37 +15,33 @@ function App() {
     try {
       const cleanUsername = username.trim().replace(/ /g, "_");
 
+      // Wikimedia API for usercontribs
       const contribsURL = `https://en.wikipedia.org/w/api.php?action=query&list=usercontribs&ucuser=${cleanUsername}&uclimit=5&format=json&origin=*`;
-      const userInfoURL = `https://en.wikipedia.org/w/api.php?action=query&list=users&ususers=${cleanUsername}&usprop=editcount|registration|groups&format=json&origin=*`;
-
-      const [contribsRes, userInfoRes] = await Promise.all([
-        axios.get(contribsURL),
-        axios.get(userInfoURL),
-      ]);
-
+      const contribsRes = await axios.get(contribsURL);
       const contribs = contribsRes.data.query.usercontribs;
-      const recentEdits = contribsRes.data.query.usercontribs;
-      const user = userInfoRes.data.query.users[0];
 
-      if (!user || user?.missing || !user.editcount) {
+      // XTools data from backend proxy
+      const xtoolsURL = `http://localhost:8000/api/xtools/${cleanUsername}`;
+      const xtoolsRes = await axios.get(xtoolsURL);
+      const xtoolsData = xtoolsRes.data;
+
+      if (!xtoolsData || !xtoolsData.editcount) {
         throw new Error("Invalid or inactive Wikipedia user.");
       }
 
-      const mood = getUserMood({
-        editCount: user.editcount,
-        registrationDate: user.registration,
-        recentEdits,
-      });
-
       const formatted = {
-        username: user.name,
-        totalEdits: user.editcount,
-        activeSince: user.registration
-          ? new Date(user.registration).toLocaleDateString()
+        username: xtoolsData.user,
+        totalEdits: xtoolsData.editcount,
+        activeSince: xtoolsData.registration_date
+          ? new Date(xtoolsData.registration_date).toLocaleDateString()
           : "Unknown",
-        topTopics: [], // still optional for now
-        recentEdits: recentEdits.map((c) => c.title),
-        mood: mood,
+        topTopics: xtoolsData.top_pages?.slice(0, 3).map((p) => p.title) || [],
+        recentEdits: contribs.map((c) => c.title),
+        mood: getUserMood({
+          editCount: xtoolsData.editcount,
+          registrationDate: xtoolsData.registration_date,
+          recentEdits: contribs,
+        }),
       };
 
       setUserData(formatted);

@@ -21,7 +21,8 @@ function App() {
       const contribs = contribsRes.data.query.usercontribs;
 
       // XTools data from backend proxy
-      const xtoolsURL = `http://localhost:8000/api/xtools/${cleanUsername}`;
+      const xtoolsURL = `${process.env.REACT_APP_BACKEND_URL}/api/xtools/${cleanUsername}`;
+
       const xtoolsRes = await axios.get(xtoolsURL);
       const xtoolsData = xtoolsRes.data;
 

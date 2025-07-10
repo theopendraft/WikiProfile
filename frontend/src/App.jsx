@@ -5,6 +5,8 @@ import axios from "axios";
 import { getUserMood } from "./utils/getUserMood";
 import { fetchGlobalEditCount } from "./utils/fetchGlobalEditCount";
 import { fetchTopEditedPages } from "./utils/fetchTopEditedPages";
+import { fetchRecentEdits } from "./utils/fetchRecentEdits";
+
 
 function App() {
   const [userData, setUserData] = useState(null);
@@ -29,6 +31,9 @@ function App() {
 
       // ✅ Step 2: Fetch global edit count from multiple projects
       const globalEditData = await fetchGlobalEditCount(cleanUsername);
+
+     const recentEdits = await fetchRecentEdits("en.wikipedia.org", cleanUsername);
+
 
       const topEdits = await fetchTopEditedPages(
         "en.wikipedia.org",
@@ -55,7 +60,8 @@ function App() {
           : "Unknown",
         topTopics,
         topPages: topEdits.slice(0, 5),
-        recentEdits: ["Not available in this mode"],
+        
+        recentEdits,
         mood,
       };
 

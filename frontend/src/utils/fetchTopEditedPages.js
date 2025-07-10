@@ -18,7 +18,7 @@ export async function fetchTopEditedPages(
       return [];
     }
 
-    return topEditsArray.map((item) => ({
+    return topEditsArray.slice(0, 3).map((item) => ({
       title: item.full_page_title,
       count: item.count,
       class: item.assessment?.class || "Unrated",

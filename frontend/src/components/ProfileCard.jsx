@@ -9,46 +9,36 @@ function ProfileCard({ data }) {
         🏆 Total Edits: {data.totalEdits}
       </p>
 
-      {/* <div className="mt-3">
-        <h3 className="font-medium text-blue-600">Top Topics:</h3>
-        <ul className="flex gap-2 flex-wrap mt-1">
-          {data.recentEdits.map((title, i) => (
-            <li key={i}>
-              <a
-                href={`https://www.wikimedia.org/wiki/${title.replace(
-                  / /g,
-                  "_"
-                )}`}
-                className="text-blue-600 underline"
-                target="_blank"
-              >
-                {title}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div> */}
+<div className="mt-4">
+  <h3 className="text-sm font-semibold text-gray-600 mb-1">🕒 Recent Edits</h3>
+  {data.recentEdits.length > 0 ? (
+    <ul className="list-disc pl-4 text-sm">
+      {data.recentEdits.map((edit, index) => (
+        <li key={index}>
+          <a
+            href={edit.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 underline"
+          >
+            {edit.title}
+          </a>{" "}
+          <span className="block text-xs text-gray-500 break-words">
 
-      <div className="mt-3">
-        <h3 className="font-medium text-blue-600">Recent Edits:</h3>
-        <ul className="list-disc pl-4 text-sm text-gray-700">
-          {data.recentEdits.map((edit, i) => (
-            <li key={i}>
-              <span className="font-medium text-gray-800">
-                {edit.project?.split(".")[0]}:
-              </span>{" "}
-              <a
-                href={edit.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 underline"
-              >
-                {edit.title}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
+            ({new Date(edit.timestamp).toLocaleString()})
+          </span>
+          <div className="text-xs text-gray-600 italic">
+            {edit.comment?.trim() ? edit.comment : "- No edit summary given"}
+          </div>
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <p className="text-sm text-gray-500">No recent edits found.</p>
+  )}
+</div>
+
+
 
       <div className="mb-2">
         <h3 className="font-medium text-blue-600">Top Edited Articles</h3>

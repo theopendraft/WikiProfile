@@ -4,6 +4,7 @@ import UserInput from "./components/UserInput";
 import axios from "axios";
 import { getUserMood } from "./utils/getUserMood";
 import { fetchGlobalEditCount } from "./utils/fetchGlobalEditCount";
+import { fetchTopEditedPages } from "./utils/fetchTopEditedPages";
 
 function App() {
   const [userData, setUserData] = useState(null);
@@ -21,13 +22,22 @@ function App() {
       const userInfoURL = `https://en.wikipedia.org/w/api.php?action=query&list=users&ususers=${cleanUsername}&usprop=editcount|registration|groups&format=json&origin=*`;
       const userRes = await axios.get(userInfoURL);
       const user = userRes.data.query.users[0];
-
+      
       if (!user || user.missing) {
         throw new Error("Invalid or inactive Wikimedia user.");
       }
 
       // ✅ Step 2: Fetch global edit count from multiple projects
       const globalEditData = await fetchGlobalEditCount(cleanUsername);
+
+      const topEdits = await fetchTopEditedPages(
+        "en.wikipedia.org",
+        cleanUsername
+      );
+
+      const topTopics = topEdits.length
+        ? topEdits.slice(0, 3).map((p) => p.title)
+        : ["No major article contributions"];
 
       // ✅ Step 3: Compute mood
       const mood = getUserMood({
@@ -43,10 +53,8 @@ function App() {
         activeSince: user.registration
           ? new Date(user.registration).toLocaleDateString()
           : "Unknown",
-        topTopics: globalEditData.breakdown
-          .sort((a, b) => b.count - a.count)
-          .slice(0, 3)
-          .map((p) => p.project),
+        topTopics,
+        topPages: topEdits.slice(0, 5),
         recentEdits: ["Not available in this mode"],
         mood,
       };

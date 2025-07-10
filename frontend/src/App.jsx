@@ -3,6 +3,7 @@ import ProfileCard from "./components/ProfileCard";
 import UserInput from "./components/UserInput";
 import axios from "axios";
 import { getUserMood } from "./utils/getUserMood";
+import { fetchGlobalEditCount } from "./utils/fetchGlobalEditCount";
 
 function App() {
   const [userData, setUserData] = useState(null);
@@ -10,56 +11,59 @@ function App() {
   const [error, setError] = useState("");
 
   const fetchData = async (username) => {
-  setLoading(true);
-  setError("");
-  try {
-    const contribsURL = `https://commons.wikimedia.org/w/api.php?action=query&list=usercontribs&ucuser=${username}&uclimit=5&format=json&origin=*`;
-    const userInfoURL = `https://commons.wikimedia.org/w/api.php?action=query&list=users&ususers=${username}&usprop=editcount|registration|groups&format=json&origin=*`;
+    setLoading(true);
+    setError("");
 
-    const [contribsRes, userRes] = await Promise.all([
-      axios.get(contribsURL),
-      axios.get(userInfoURL),
-    ]);
+    try {
+      const cleanUsername = username.trim().replace(/ /g, "_");
 
-    const contribs = contribsRes.data.query.usercontribs;
-const user = userRes.data.query.users[0];
+      // ✅ Step 1: Fetch user profile info (for registration date, etc)
+      const userInfoURL = `https://en.wikipedia.org/w/api.php?action=query&list=users&ususers=${cleanUsername}&usprop=editcount|registration|groups&format=json&origin=*`;
+      const userRes = await axios.get(userInfoURL);
+      const user = userRes.data.query.users[0];
 
-    if (!user || user.missing || !user.editcount) {
+      if (!user || user.missing) {
         throw new Error("Invalid or inactive Wikimedia user.");
       }
 
-    const mood = getUserMood({
-      editCount: user.editcount,
-      registrationDate: user.registration,
-      recentEdits: contribs, // ✅ this is the correct data
-    });
+      // ✅ Step 2: Fetch global edit count from multiple projects
+      const globalEditData = await fetchGlobalEditCount(cleanUsername);
 
-    
-    const formatted = {
-  username: user.name,
-  totalEdits: user.editcount || "N/A",
-  activeSince: user.registration
-    ? new Date(user.registration).toLocaleDateString()
-    : "Unknown",
-  topTopics: [],
-  recentEdits: contribs.map((c) => c.title),
-  mood: mood, // ✅ use the mood you computed
-};
+      // ✅ Step 3: Compute mood
+      const mood = getUserMood({
+        editCount: globalEditData.total,
+        registrationDate: user.registration,
+        recentEdits: [], // You can enhance this later
+      });
 
+      // ✅ Step 4: Prepare final object
+      const formatted = {
+        username: user.name,
+        totalEdits: globalEditData.total,
+        activeSince: user.registration
+          ? new Date(user.registration).toLocaleDateString()
+          : "Unknown",
+        topTopics: globalEditData.breakdown
+          .sort((a, b) => b.count - a.count)
+          .slice(0, 3)
+          .map((p) => p.project),
+        recentEdits: ["Not available in this mode"],
+        mood,
+      };
 
-    setUserData(formatted);
-  } catch (err) {
-    console.error(err);
-    setError("User not found or API error.");
-    setUserData(null);
-  }
-  setLoading(false);
-};
+      setUserData(formatted);
+    } catch (err) {
+      console.error(err);
+      setError("User not found or API error.");
+      setUserData(null);
+    }
 
+    setLoading(false);
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-start p-6">
-      <h1 className="text-2xl text-gray-600 font-black-100 font-bold mb-4">
+      <h1 className="text-2xl text-gray-600 font-bold mb-4">
         🔍 Quick Wiki Profile Card
       </h1>
       <UserInput onFetch={fetchData} />

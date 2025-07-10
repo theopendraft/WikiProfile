@@ -8,9 +8,18 @@ function ProfileCard({ data }) {
       <div className="mt-3">
         <h3 className="font-medium text-blue-600">Top Topics:</h3>
         <ul className="flex gap-2 flex-wrap mt-1">
-          {data.topTopics.map((topic, i) => (
-            <li key={i} className="bg-blue-100 text-blue-800 text-sm px-2 py-1 rounded-full">{topic}</li>
-          ))}
+          {data.recentEdits.map((title, i) => (
+  <li key={i}>
+    <a
+      href={`https://www.wikimedia.org/wiki/${title.replace(/ /g, "_")}`}
+      className="text-blue-600 underline"
+      target="_blank"
+    >
+      {title}
+    </a>
+  </li>
+))}
+
         </ul>
       </div>
 

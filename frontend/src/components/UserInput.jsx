@@ -11,7 +11,7 @@ function UserInput({ onFetch }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="mb-6 flex flex-wrap items-center justify-center gap-2 w-full"
+      className="flex flex-wrap items-center justify-center gap-2 w-full"
     >
       <input
         type="text"

@@ -48,7 +48,7 @@ function App() {
       }
 
       const recentEdits = await fetchRecentEdits(
-        "en.wikimedia.org",
+        "en.wikipedia.org",
         cleanUsername
       );
 
@@ -95,38 +95,59 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-dark-100 dark:bg-gray-800 justify-content-center flex flex-col items-center justify-start p-6">
-      <div className="w-full min-h-full max-w-2xl bg-white dark:bg-gray-600 shadow-md justify-content-center rounded-2xl p-6">
-        <h1 className="text-3xl font-bold text-gray-800 dark:text-white mb-6 text-center">
-          🔍 Quick Wiki Profile Card
-        </h1>
+    <>
+      <div className="min-h-screen flex items-center justify-center bg-dark-100 dark:bg-gray-800">
+        <div className="w-full min-h-full max-w-2xl bg-white dark:bg-gray-600 shadow-md flex flex-col justify-center items-center rounded-2xl p-6">
+          {/* Wikimedia-style header */}
+          <header className="w-full flex items-center gap-3 mb-6 border-b border-gray-200 pb-3">
+            <img
+              src="./public/wiki_profile_logo.svg"
+              alt="Wiki Profile Logo"
+              className="w-10 h-10"
+            />
+            <span className="text-2xl font-bold text-[#0063bf] tracking-tight font-serif">
+              Wiki<span className="text-black dark:text-white">Profile</span>
+            </span>
+            <span className="ml-auto text-xs text-gray-400 font-mono hidden sm:block">
+              powered by Wikimedia
+            </span>
+          </header>
 
-        <UserInput onFetch={fetchData} />
-        <div
-          className="flex justify-center items-center mt-6"
-          role="status"
-          aria-busy="true"
-        >
-          {loading && (
-            <div className="flex justify-center items-center mt-6">
-              <div className="w-6 h-6 border-4 border-[#0063bf] border-t-transparent rounded-full animate-spin mr-2"></div>
-              <span className="text-sm text-[#0063bf] font-medium">
-                Fetching profile...
-              </span>
+          <h1 className="text-3xl font-bold text-gray-800 dark:text-white mb-6 mt-2 text-center">
+            Quick Wiki Profile Card
+          </h1>
+
+          <UserInput onFetch={fetchData} />
+          <div
+            className="flex justify-center items-center mt-6"
+            role="status"
+            aria-busy="true"
+          >
+            {loading && (
+              <div className="flex justify-center items-center mt-6">
+                <div className="w-6 h-6 border-4 border-[#0063bf] border-t-transparent rounded-full animate-spin mr-2"></div>
+                <span className="text-sm text-[#0063bf] font-medium">
+                  Fetching profile...
+                </span>
+              </div>
+            )}
+          </div>
+
+          {error && <p className="text-red-600 text-center mt-4">{error}</p>}
+
+          {/* Show ProfileCard only when not loading and userData exists */}
+          {!loading && userData && (
+            <div className="mt-6 flex flex-col items-center justify-center w-full max-w-2xl bg-gray-100 dark:bg-gray-600 shadow-md rounded-2xl p-6 animation-fade-in">
+              <ProfileCard data={userData} />
             </div>
           )}
         </div>
-
-        {error && <p className="text-red-600 text-center mt-4">{error}</p>}
-
-        {/* Show ProfileCard only when not loading and userData exists */}
-        {!loading && userData && (
-          <div className="mt-6 flex flex-col items-center justify-center w-full max-w-2xl bg-gray-100 dark:bg-gray-600 shadow-md rounded-2xl p-6 animation-fade-in">
-            <ProfileCard data={userData} />
-          </div>
-        )}
       </div>
-    </div>
+      <footer className="text-xs bg-dark-100 dark:bg-gray-800 text-gray-200 text-center w-full">
+        Made with ❤️ using React, Tailwind, and Wikimedia APIs.
+        <br />© {new Date().getFullYear()} The open draft
+      </footer>
+    </>
   );
 }
 

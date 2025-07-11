@@ -15,7 +15,7 @@ export default {
         "red-berry": "#990000", // Wikimedia red
       },
       animation: {
-        "fade-in": "fadeIn 0.4s ease-in-out",
+        fadeIn: "fadeIn 0.5s ease-in-out forwards",
         "pop-in": "popIn 0.3s ease-in-out",
       },
       keyframes: {

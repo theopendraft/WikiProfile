@@ -2,7 +2,7 @@ import { useState } from "react";
 import ProfileCard from "./components/ProfileCard";
 import UserInput from "./components/UserInput";
 import axios from "axios";
-
+import { motion } from "framer-motion";
 import { getUserMood } from "./utils/getUserMood";
 import { fetchGlobalEditCount } from "./utils/fetchGlobalEditCount";
 import { fetchTopEditedPages } from "./utils/fetchTopEditedPages";
@@ -94,61 +94,71 @@ function App() {
     setLoading(false);
   };
 
-  return (
-    <>
-      <div className="min-h-screen flex items-center justify-center bg-dark-100 dark:bg-gray-800">
-        <div className="w-full min-h-full max-w-2xl bg-white dark:bg-gray-600 shadow-md flex flex-col justify-center items-center rounded-2xl p-6">
-          {/* Wikimedia-style header */}
-          <header className="w-full flex items-center gap-3 mb-6 border-b border-gray-200 pb-3">
-            <img
-              src="/wiki_profile_logo.svg"
-              alt="Wiki Profile Logo"
-              className="w-10 h-10"
-            />
-            <span className="text-2xl font-bold text-[#0063bf] tracking-tight font-serif">
-              Wiki<span className="text-black dark:text-white">Profile</span>
-            </span>
-            <span className="ml-auto text-xs text-gray-400 font-mono hidden sm:block">
-              powered by Wikimedia
-            </span>
-          </header>
-
-          <h1 className="text-3xl font-bold text-gray-800 dark:text-white mb-6 mt-2 text-center">
-            Quick Wiki Profile Card
+return (
+  <>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 px-4">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.96 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.4 }}
+        className="w-full max-w-2xl bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-6 md:p-8"
+      >
+        {/* Header */}
+        <header className="flex items-center gap-3 mb-6 border-b pb-3 border-gray-200 dark:border-gray-700">
+          <img
+            src="/wiki_profile_logo.svg"
+            alt="Wiki Profile Logo"
+            className="w-10 h-10"
+          />
+          <h1 className="text-2xl font-serif font-bold text-[#0063bf] tracking-tight">
+            Wiki<span className="text-black dark:text-white">Profile</span>
           </h1>
+          <span className="ml-auto text-xs text-gray-400 font-mono hidden sm:block">
+            powered by Wikimedia
+          </span>
+        </header>
 
-          <UserInput onFetch={fetchData} />
-          <div
-            className="flex justify-center items-center mt-6"
-            role="status"
-            aria-busy="true"
-          >
-            {loading && (
-              <div className="flex justify-center items-center mt-6">
-                <div className="w-6 h-6 border-4 border-[#0063bf] border-t-transparent rounded-full animate-spin mr-2"></div>
-                <span className="text-sm text-[#0063bf] font-medium">
-                  Fetching profile...
-                </span>
-              </div>
-            )}
+        {/* Title */}
+        <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-800 dark:text-white mb-6">
+          Quick Wiki Profile Card
+        </h2>
+
+        {/* Search */}
+        <UserInput onFetch={fetchData} />
+
+        {/* Loading */}
+        {loading && (
+          <div className="flex justify-center items-center mt-6 animate-fadeIn">
+            <div className="w-6 h-6 border-4 border-[#0063bf] border-t-transparent rounded-full animate-spin mr-2"></div>
+            <span className="text-sm text-[#0063bf] font-medium">Fetching profile...</span>
           </div>
+        )}
 
-          {error && <p className="text-red-600 text-center mt-4">{error}</p>}
+        {/* Error */}
+        {error && (
+          <p className="text-red-500 text-center mt-4 animate-fadeIn">{error}</p>
+        )}
+        
+        {/* ProfileCard */}
+        {!loading && userData && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="mt-6 w-full flex flex-col items-center"
+          >
+            <ProfileCard data={userData} />
+          </motion.div>
+        )}
 
-          {/* Show ProfileCard only when not loading and userData exists */}
-          {!loading && userData && (
-            <div className="mt-6 flex flex-col items-center justify-center w-full max-w-2xl bg-gray-100 dark:bg-gray-600 shadow-md rounded-2xl p-6 animation-fade-in">
-              <ProfileCard data={userData} />
-            </div>
-          )}
-        </div>
-      </div>
-      <footer className="text-xs bg-dark-100 dark:bg-gray-800 text-gray-200 text-center w-full">
-        Made with ❤️ using React, Tailwind, and Wikimedia APIs.
-        <br />© {new Date().getFullYear()} The open draft
-      </footer>
-    </>
-  );
+      </motion.div>
+    </div>
+
+    {/* Footer */}
+    <footer className="text-xs py-4 text-center bg-gray-50 dark:bg-gray-900 text-gray-400">
+      Made with ❤️ using Wikimedia APIs. © {new Date().getFullYear()} The Open Draft
+    </footer>
+  </>
+);
 }
-
 export default App;

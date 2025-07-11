@@ -1,10 +1,22 @@
 function ProfileCard({ data }) {
   return (
     <div className="bg-gray-100 justify-content-center items-center shadow-xl rounded-2xl p-6 w-full max-w-md border border-gray-100 transition-all">
-      
-
       {/* Username */}
-      <h2 className="text-2xl flex  font-semibold text-[#0063bf]">
+      <h2 className="text-2xl flex items-center font-semibold text-[#0063bf]">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="w-7 h-7 mr-2 text-gray-400"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={2}
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M5.121 17.804A9 9 0 1112 21a9 9 0 01-6.879-3.196zM15 11a3 3 0 11-6 0 3 3 0 016 0z"
+          />
+        </svg>
         @{data.username}
       </h2>
       {/* Mood Section */}

@@ -96,12 +96,12 @@ function App() {
 
 return (
   <>
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 px-4">
+    <div className=" min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 px-4">
       <motion.div
         initial={{ opacity: 0, scale: 0.96 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.4 }}
-        className="w-full max-w-2xl bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-6 md:p-8"
+        className=" mt-2 md:mt-8 w-full max-w-2xl bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-6 md:p-8"
       >
         {/* Header */}
         <header className="flex items-center gap-3 mb-6 border-b pb-3 border-gray-200 dark:border-gray-700">

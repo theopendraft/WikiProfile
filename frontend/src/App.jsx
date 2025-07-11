@@ -101,7 +101,7 @@ function App() {
           {/* Wikimedia-style header */}
           <header className="w-full flex items-center gap-3 mb-6 border-b border-gray-200 pb-3">
             <img
-              src="./public/wiki_profile_logo.svg"
+              src="/wiki_profile_logo.svg"
               alt="Wiki Profile Logo"
               className="w-10 h-10"
             />

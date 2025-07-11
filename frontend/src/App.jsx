@@ -2,10 +2,12 @@ import { useState } from "react";
 import ProfileCard from "./components/ProfileCard";
 import UserInput from "./components/UserInput";
 import axios from "axios";
+
 import { getUserMood } from "./utils/getUserMood";
 import { fetchGlobalEditCount } from "./utils/fetchGlobalEditCount";
 import { fetchTopEditedPages } from "./utils/fetchTopEditedPages";
 import { fetchRecentEdits } from "./utils/fetchRecentEdits";
+import { fetchGlobalFirstEdit } from "./utils/fetchGlobalFirstEdit";
 
 function App() {
   const [userData, setUserData] = useState(null);
@@ -40,13 +42,13 @@ function App() {
       // If user has zero edits on all projects, treat as not found
       const totalEdits = globalEditData.total;
       if (totalEdits === 0) {
-        setError("User account not found on any major Wikimedia project.");
+        setError("User not found on any major Wikimedia project.");
         setLoading(false);
         return;
       }
 
       const recentEdits = await fetchRecentEdits(
-        "en.wikipedia.org",
+        "en.wikimedia.org",
         cleanUsername
       );
 
@@ -59,6 +61,9 @@ function App() {
         ? topEdits.slice(0, 3).map((p) => p.title)
         : ["No major article contributions"];
 
+      // Fetch first edit timestamp (active since) from ALL projects
+      const firstEditTimestamp = await fetchGlobalFirstEdit(cleanUsername);
+
       // ✅ Step 3: Compute mood
       const mood = getUserMood({
         editCount: totalEdits,
@@ -70,8 +75,8 @@ function App() {
       const formatted = {
         username: user.name,
         totalEdits,
-        activeSince: user.registration
-          ? new Date(user.registration).toLocaleDateString()
+        activeSince: firstEditTimestamp
+          ? new Date(firstEditTimestamp).toLocaleDateString()
           : "Unknown",
         topTopics,
         topPages: topEdits.slice(0, 5),

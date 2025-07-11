@@ -30,21 +30,20 @@ function ProfileCard({ data }) {
       {/* Edit Metadata */}
       <div className="flex flex-col md:grid md:grid-cols-2 gap-4 my-4">
 
-  <div className="bg-[#0063bf0d] p-4 rounded-lg text-center">
-    <p className="text-gray-600 text-sm">Global Edits</p>
-    <p className="text-xl font-bold text-[#0063bf] break-words">
-      {data.totalEdits}
-    </p>
-  </div>
+        <div className="bg-[#0063bf0d] p-4 rounded-lg text-center">
+          <p className="text-gray-600 text-sm">Global Edits</p>
+          <p className="text-xl font-bold text-[#0063bf] break-words">
+            {data.totalEdits}
+          </p>
+        </div>
 
-  <div className="bg-[#3399661a] p-4 rounded-lg text-center">
-    <p className="text-gray-600 text-sm">Active Since</p>
-    <p className="text-xl font-bold text-[#339966] break-words truncate max-w-full">
-      {data.activeSince}
-    </p>
-  </div>
-</div>
-
+        <div className="bg-[#3399661a] p-4 rounded-lg text-center">
+          <p className="text-gray-600 text-sm">Active Since</p>
+          <p className="text-xl font-bold text-[#339966] break-words truncate max-w-full">
+            {data.activeSince}
+          </p>
+        </div>
+      </div>
 
       {/* Recent Edits */}
       {data.project === "global" ? (
@@ -107,13 +106,12 @@ function ProfileCard({ data }) {
                   {page.count} edits
                 </span>{" "}
                 <span
-                  className={` inline-block text-xs px-2 py-0.5 rounded-full font-semibold ${
-                    page.class === "B"
+                  className={` inline-block text-xs px-2 py-0.5 rounded-full font-semibold ${page.class === "B"
                       ? "bg-wmgreen text-white"
                       : page.class === "C"
-                      ? "bg-yellow-500 text-black"
-                      : "bg-gray-300 text-gray-800"
-                  }`}
+                        ? "bg-yellow-500 text-black"
+                        : "bg-gray-300 text-gray-800"
+                    }`}
                   style={{
                     backgroundColor: page.color || "#ccc",
                   }}

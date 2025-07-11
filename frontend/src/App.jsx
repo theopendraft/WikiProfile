@@ -76,7 +76,7 @@ function App() {
         username: user.name,
         totalEdits,
         activeSince: firstEditTimestamp
-          ? new Date(firstEditTimestamp).toLocaleDateString()
+          ? new Date(firstEditTimestamp).toLocaleDateString('en-GB')
           : "Unknown",
         topTopics,
         topPages: topEdits.slice(0, 5),

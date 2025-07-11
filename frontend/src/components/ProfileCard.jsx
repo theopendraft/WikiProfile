@@ -28,22 +28,23 @@ function ProfileCard({ data }) {
       </div>
 
       {/* Edit Metadata */}
-      <div className="mt-2 space-y-1 text-sm text-gray-700">
-        <div className="grid grid-cols-2 gap-4 my-4">
-          <div className="bg-[#0063bf0d] p-4 rounded-lg text-center">
-            <p className="text-gray-600 text-sm">Global Edits</p>
-            <p className="text-xl font-bold text-[#0063bf]">
-              {data.totalEdits}
-            </p>
-          </div>
-          <div className="bg-[#3399661a] p-4 rounded-lg text-center">
-            <p className="text-gray-600 text-sm">Active Since</p>
-            <p className="text-xl font-bold text-[#339966]">
-              {data.activeSince}
-            </p>
-          </div>
-        </div>
-      </div>
+      <div className="flex flex-col md:grid md:grid-cols-2 gap-4 my-4">
+
+  <div className="bg-[#0063bf0d] p-4 rounded-lg text-center">
+    <p className="text-gray-600 text-sm">Global Edits</p>
+    <p className="text-xl font-bold text-[#0063bf] break-words">
+      {data.totalEdits}
+    </p>
+  </div>
+
+  <div className="bg-[#3399661a] p-4 rounded-lg text-center">
+    <p className="text-gray-600 text-sm">Active Since</p>
+    <p className="text-xl font-bold text-[#339966] break-words truncate max-w-full">
+      {data.activeSince}
+    </p>
+  </div>
+</div>
+
 
       {/* Recent Edits */}
       {data.project === "global" ? (

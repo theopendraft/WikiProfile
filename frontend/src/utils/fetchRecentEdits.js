@@ -13,7 +13,7 @@ export async function fetchRecentEdits(project, username, limit = 5) {
       return [];
     }
 
-    return edits.slice(0, 3).map((edit) => ({
+    return edits.slice(0, 2).map((edit) => ({
       title: edit.title,
       timestamp: edit.timestamp,
       comment: edit.comment || "",

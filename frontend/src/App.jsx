@@ -7,7 +7,6 @@ import { fetchGlobalEditCount } from "./utils/fetchGlobalEditCount";
 import { fetchTopEditedPages } from "./utils/fetchTopEditedPages";
 import { fetchRecentEdits } from "./utils/fetchRecentEdits";
 
-
 function App() {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -24,7 +23,7 @@ function App() {
       const userInfoURL = `https://en.wikipedia.org/w/api.php?action=query&list=users&ususers=${cleanUsername}&usprop=editcount|registration|groups&format=json&origin=*`;
       const userRes = await axios.get(userInfoURL);
       const user = userRes.data.query.users[0];
-      
+
       if (!user || user.missing) {
         throw new Error("Invalid or inactive Wikimedia user.");
       }
@@ -32,8 +31,10 @@ function App() {
       // ✅ Step 2: Fetch global edit count from multiple projects
       const globalEditData = await fetchGlobalEditCount(cleanUsername);
 
-     const recentEdits = await fetchRecentEdits("en.wikipedia.org", cleanUsername);
-
+      const recentEdits = await fetchRecentEdits(
+        "en.wikipedia.org",
+        cleanUsername
+      );
 
       const topEdits = await fetchTopEditedPages(
         "en.wikipedia.org",
@@ -60,7 +61,7 @@ function App() {
           : "Unknown",
         topTopics,
         topPages: topEdits.slice(0, 5),
-        
+
         recentEdits,
         mood,
       };
@@ -76,14 +77,37 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-start p-6">
-      <h1 className="text-2xl text-gray-600 font-bold mb-4">
-        🔍 Quick Wiki Profile Card
-      </h1>
-      <UserInput onFetch={fetchData} />
-      {loading && <p className="text-blue-600">Loading...</p>}
-      {error && <p className="text-red-600">{error}</p>}
-      {userData && <ProfileCard data={userData} />}
+    <div className="min-h-screen bg-dark-100 dark:bg-gray-800 justify-content-center flex flex-col items-center justify-start p-6">
+      <div className="w-full min-h-full max-w-2xl bg-white dark:bg-gray-600 shadow-md justify-content-center rounded-2xl p-6">
+        <h1 className="text-3xl font-bold text-gray-800 dark:text-white mb-6 text-center">
+          🔍 Quick Wiki Profile Card
+        </h1>
+
+        <UserInput onFetch={fetchData} />
+        <div
+          className="flex justify-center items-center mt-6"
+          role="status"
+          aria-busy="true"
+        >
+          {loading && (
+            <div className="flex justify-center items-center mt-6">
+              <div className="w-6 h-6 border-4 border-[#0063bf] border-t-transparent rounded-full animate-spin mr-2"></div>
+              <span className="text-sm text-[#0063bf] font-medium">
+                Fetching profile...
+              </span>
+            </div>
+          )}
+        </div>
+
+        {error && <p className="text-red-600 text-center mt-4">{error}</p>}
+
+        {/* Show ProfileCard only when not loading and userData exists */}
+        {!loading && userData && (
+          <div className="mt-6 flex flex-col items-center justify-center w-full max-w-2xl bg-gray-100 dark:bg-gray-600 shadow-md rounded-2xl p-6 animation-fade-in">
+            <ProfileCard data={userData} />
+          </div>
+        )}
+      </div>
     </div>
   );
 }

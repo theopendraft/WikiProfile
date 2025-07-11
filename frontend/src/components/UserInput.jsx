@@ -9,19 +9,23 @@ function UserInput({ onFetch }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="mb-4 flex gap-2">
+    <form
+      onSubmit={handleSubmit}
+      className="mb-6 flex flex-wrap items-center justify-center gap-2 w-full"
+    >
       <input
         type="text"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
-        placeholder="Enter Wikipedia Username"
-        className="border border-gray-300 rounded px-3 py-2 w-64"
+          placeholder="Try 'Jimbo Wales'"
+        required
+        className="flex-grow min-w-[220px] max-w-[300px] px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:text-white"
       />
       <button
         type="submit"
-        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        className="px-5 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all duration-200 shadow-sm dark:bg-blue-500 dark:hover:bg-blue-400"
       >
-        Fetch
+        🔍 Fetch
       </button>
     </form>
   );

@@ -15,6 +15,7 @@ function App() {
   const fetchData = async (username) => {
     setLoading(true);
     setError("");
+    setUserData(null); // Hide card immediately on fetch
 
     try {
       const cleanUsername = username.trim().replace(/ /g, "_");
@@ -24,12 +25,25 @@ function App() {
       const userRes = await axios.get(userInfoURL);
       const user = userRes.data.query.users[0];
 
+      // If user does not exist on English Wikipedia, check other projects
       if (!user || user.missing) {
-        throw new Error("Invalid or inactive Wikimedia user.");
+        setError(
+          "User not found on English Wikipedia. Please check the username."
+        );
+        setLoading(false);
+        return;
       }
 
       // ✅ Step 2: Fetch global edit count from multiple projects
       const globalEditData = await fetchGlobalEditCount(cleanUsername);
+
+      // If user has zero edits on all projects, treat as not found
+      const totalEdits = globalEditData.total;
+      if (totalEdits === 0) {
+        setError("User account not found on any major Wikimedia project.");
+        setLoading(false);
+        return;
+      }
 
       const recentEdits = await fetchRecentEdits(
         "en.wikipedia.org",
@@ -47,7 +61,7 @@ function App() {
 
       // ✅ Step 3: Compute mood
       const mood = getUserMood({
-        editCount: globalEditData.total,
+        editCount: totalEdits,
         registrationDate: user.registration,
         recentEdits: [], // You can enhance this later
       });
@@ -55,13 +69,12 @@ function App() {
       // ✅ Step 4: Prepare final object
       const formatted = {
         username: user.name,
-        totalEdits: globalEditData.total,
+        totalEdits,
         activeSince: user.registration
           ? new Date(user.registration).toLocaleDateString()
           : "Unknown",
         topTopics,
         topPages: topEdits.slice(0, 5),
-
         recentEdits,
         mood,
       };

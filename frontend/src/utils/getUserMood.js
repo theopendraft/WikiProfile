@@ -11,23 +11,28 @@ export function getUserMood({ editCount, registrationDate, recentEdits }) {
   const editedTitles = recentEdits.map((e) => e.title);
 
   if (accountAgeMonths > 60 && editCount > 10000) {
-    return { emoji: "🧠", label: "Veteran Contributor" };
+    return { emoji: "🧠", label: "Wiki Legend" };
   }
   if (accountAgeMonths > 24 && editCount > 2000) {
-    return { emoji: "🤓", label: "Nerdy Contributor" };
+    return { emoji: "🤓", label: "Seasoned Editor" };
   }
-  if (editedTitles.some((t) => t.includes("User") || t.includes("Sandbox") || t.includes("Template"))) {
-    return { emoji: "🧹", label: "Cleanup Editor" };
+  if (
+    editedTitles.some(
+      (t) =>
+        t.includes("User") || t.includes("Sandbox") || t.includes("Template")
+    )
+  ) {
+    return { emoji: "🧹", label: "Wiki Gardener" };
   }
   if (editsInLast30Days >= 100) {
-    return { emoji: "🔥", label: "Hyperactive Editor" };
+    return { emoji: "🔥", label: "Super Active!" };
   }
   if (accountAgeMonths < 3 && editCount < 50) {
-    return { emoji: "🛸", label: "Newbie" };
+    return { emoji: "🛸", label: "Just Landed" };
   }
   if (accountAgeMonths > 12 && editsInLast30Days === 0) {
-    return { emoji: "👻", label: "Ghost Mode" };
+    return { emoji: "👻", label: "Taking a Break" };
   }
 
-  return { emoji: "🤖", label: "Basic Contributor" };
+  return { emoji: "🤖", label: "Active Contributor" };
 }

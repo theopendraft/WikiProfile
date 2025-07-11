@@ -50,7 +50,7 @@ const xtoolsProjects = [
   "wikidata.org",
   "wikimania.wikimedia.org"
 
-  // aur bhi add kar sakta hai tu
+  
 ];
 
 export async function fetchGlobalEditCount(username) {

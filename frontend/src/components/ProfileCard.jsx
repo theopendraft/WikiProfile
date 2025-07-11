@@ -3,7 +3,7 @@ function ProfileCard({ data }) {
     <div className="bg-gray-100 justify-content-center items-center shadow-xl rounded-2xl p-6 w-full max-w-md border border-gray-100 transition-all">
       {/* Username */}
       <h2 className="text-2xl flex items-center font-semibold text-[#0063bf]">
-        <svg
+        {/* <svg
           xmlns="http://www.w3.org/2000/svg"
           className="w-7 h-7 mr-2 text-gray-400"
           fill="none"
@@ -16,11 +16,14 @@ function ProfileCard({ data }) {
             strokeLinejoin="round"
             d="M5.121 17.804A9 9 0 1112 21a9 9 0 01-6.879-3.196zM15 11a3 3 0 11-6 0 3 3 0 016 0z"
           />
-        </svg>
-        @{data.username}
+        </svg> */}
+        <div className="w-9 h-9 rounded-full bg-[#0063bf] text-white flex items-center justify-center font-bold text-xl mr-2">
+  {data.username.charAt(0).toUpperCase()}
+</div>
+        {data.username}
       </h2>
       {/* Mood Section */}
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-1 ml-8">
         <span className="text-1 ">{data.mood.emoji}</span>
         <span className="text-sm text-gray-400 dark:text-gray-400">
           {data.mood.label}

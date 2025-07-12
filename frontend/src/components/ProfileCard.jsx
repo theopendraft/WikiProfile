@@ -18,8 +18,8 @@ function ProfileCard({ data }) {
           />
         </svg> */}
         <div className="w-9 h-9 rounded-full bg-[#0063bf] text-white flex items-center justify-center font-bold text-xl mr-2">
-  {data.username.charAt(0).toUpperCase()}
-</div>
+          {data.username.charAt(0).toUpperCase()}
+        </div>
         {data.username}
       </h2>
       {/* Mood Section */}
@@ -47,6 +47,9 @@ function ProfileCard({ data }) {
           </p>
         </div>
       </div>
+
+
+
 
       {/* Recent Edits */}
       {data.project === "global" ? (
@@ -110,10 +113,10 @@ function ProfileCard({ data }) {
                 </span>{" "}
                 <span
                   className={` inline-block text-xs px-2 py-0.5 rounded-full font-semibold ${page.class === "B"
-                      ? "bg-wmgreen text-white"
-                      : page.class === "C"
-                        ? "bg-yellow-500 text-black"
-                        : "bg-gray-300 text-gray-800"
+                    ? "bg-wmgreen text-white"
+                    : page.class === "C"
+                      ? "bg-yellow-500 text-black"
+                      : "bg-gray-300 text-gray-800"
                     }`}
                   style={{
                     backgroundColor: page.color || "#ccc",

@@ -31,4 +31,5 @@ export default {
     },
   },
   plugins: [typography],
+  plugins: [require("tailwind-scrollbar-hide")],
 };

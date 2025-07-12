@@ -87,7 +87,7 @@ function App() {
       setUserData(formatted);
     } catch (err) {
       console.error(err);
-      setError("User not found or API error.");
+      setError("User not found or Network error.");
       setUserData(null);
     }
 

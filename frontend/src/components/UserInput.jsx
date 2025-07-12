@@ -3,7 +3,7 @@ import { X, User } from "lucide-react";
 import { fetchUsernameSuggestions } from "../utils/fetchUsernameSuggestions";
 
 // Consider moving suggestedUsers to a separate data file or fetching from an API
-const suggestedUsers = ["Jimbo Wales", "Shreya.Bhopal", "Krinkle"];
+const suggestedUsers = ["Jimbo Wales", "Shreya.Bhopal", "Krinkle", "Suyash.dwivedi"];
 
 // Custom hook for detecting clicks outside a ref
 function useClickOutside(ref, handler) {
@@ -30,7 +30,17 @@ function UserInput({ onFetch }) {
       if (username.length >= 2) {
         try {
           const suggestions = await fetchUsernameSuggestions(username);
-          setAutocompleteList(suggestions);
+
+          // ✅ Check for exact match and only one suggestion
+          if (
+            suggestions.length === 1 &&
+            suggestions[0].toLowerCase() === username.trim().toLowerCase()
+          ) {
+            setAutocompleteList([]); // Turn off suggestions
+          } else {
+            setAutocompleteList(suggestions); // Show suggestions
+          }
+
         } catch (err) {
           setAutocompleteList([]);
         }
@@ -42,8 +52,11 @@ function UserInput({ onFetch }) {
     return () => clearTimeout(timeout);
   }, [username]);
 
+
+
   // Close autocomplete when clicking outside
   useClickOutside(autocompleteRef, () => setAutocompleteList([]));
+  const [activeIndex, setActiveIndex] = useState(-1); // -1 means nothing is selected
 
   const handleSubmit = () => {
     if (username.trim()) {
@@ -66,6 +79,8 @@ function UserInput({ onFetch }) {
     setAutocompleteList([]);
   };
 
+
+
   return (
     <div className="w-full" ref={autocompleteRef}>
       <div className="flex items-center relative mb-2">
@@ -73,8 +88,34 @@ function UserInput({ onFetch }) {
           type="text"
           id="username-input" // Add id for accessibility with label
           value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
+          onChange={(e) => {
+            setUsername(e.target.value);
+            setActiveIndex(-1); // reset active index on change
+          }}
+          onKeyDown={(e) => {
+            if (autocompleteList.length > 0) {
+              if (e.key === "ArrowDown") {
+                e.preventDefault();
+                setActiveIndex((prev) => (prev + 1) % autocompleteList.length);
+              } else if (e.key === "ArrowUp") {
+                e.preventDefault();
+                setActiveIndex((prev) =>
+                  prev <= 0 ? autocompleteList.length - 1 : prev - 1
+                );
+              } else if (e.key === "Enter" && activeIndex >= 0) {
+                e.preventDefault();
+                setUsername(autocompleteList[activeIndex]);
+                setAutocompleteList([]);
+                setActiveIndex(-1);
+              } else if (e.key === "Escape") {
+                setAutocompleteList([]);
+                setActiveIndex(-1);
+              }
+            }
+            if (e.key === "Enter" && activeIndex === -1) {
+              handleSubmit();
+            }
+          }}
           placeholder="Enter Wikimedia username"
           aria-label="Enter Wikimedia username" // Provide accessible name
           aria-invalid={!!error} // Indicate if the input has an error
@@ -101,21 +142,34 @@ function UserInput({ onFetch }) {
 
       {/* Real-time autocomplete suggestions */}
       {autocompleteList.length > 0 && (
-        <ul className="bg-gray-800 border border-gray-200 rounded-lg  shadow absolute z-10 max-h-48 overflow-y-auto scrollbar-hide w-1/2 p-0 ">
-          {autocompleteList.map((user) => (
+        <ul className="bg-gray-800 border border-gray-500 rounded-lg  shadow absolute z-10 max-h-48 overflow-y-auto scrollbar-hide w-auto p-0 ">
+          {autocompleteList.map((name, index) => (
             <li
-              key={user}
-              onClick={() => handleSuggestedUserClick(user)}
-              className="cursor-pointer px-4 py-2 flex items-center gap-2 border-b border-gray-50 last:border-0  
-              dark:bg-gray-700 dark:border-gray-600 dark:text-gray-400 hover:text-gray-300 transition w-auto">
-              {user}
+              key={name}
+              className={`px-4 py-2 border-b border-gray-700 hover:border-blue-600 cursor-pointer ${
+                index === activeIndex
+                  ? "bg-blue-100 text-blue-600 "
+                  : "hover:text-gray-300 hover:bg-gray-700"
+              }`}
+              onClick={() => {
+                setUsername(name);
+                setAutocompleteList([]);
+                setActiveIndex(-1);
+              }}
+            >
+              {name}
             </li>
           ))}
         </ul>
       )}
 
       {error && (
-        <p id="username-error" className="text-red-600 text-sm mt-1" role="alert" aria-live="polite">
+        <p
+          id="username-error"
+          className="text-red-600 text-sm mt-1"
+          role="alert"
+          aria-live="polite"
+        >
           {error}
         </p>
       )}

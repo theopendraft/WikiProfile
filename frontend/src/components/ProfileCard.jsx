@@ -1,6 +1,6 @@
 function ProfileCard({ data }) {
   return (
-    <div className="bg-gray-100 justify-content-center items-center shadow-xl rounded-2xl p-6 w-full max-w-md border border-gray-100 transition-all">
+    <div className="bg-gray-100 justify-content-center items-center shadow-xl rounded-2xl p-6 w-full  border-gray-100 transition-all">
       {/* Username */}
       <h2 className="text-2xl flex items-center font-semibold text-[#0063bf]">
         {/* <svg

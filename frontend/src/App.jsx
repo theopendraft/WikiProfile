@@ -8,6 +8,8 @@ import { fetchGlobalEditCount } from "./utils/fetchGlobalEditCount";
 import { fetchTopEditedPages } from "./utils/fetchTopEditedPages";
 import { fetchRecentEdits } from "./utils/fetchRecentEdits";
 import { fetchGlobalFirstEdit } from "./utils/fetchGlobalFirstEdit";
+import Heatmap from "./components/Heatmap"; // <-- Import Heatmap
+import { fetchHeatmapReal } from "./utils/fetchHeatmapReal"; // <-- Import fetchHeatmapData
 
 function App() {
   const [userData, setUserData] = useState(null);
@@ -64,6 +66,9 @@ function App() {
       // Fetch first edit timestamp (active since) from ALL projects
       const firstEditTimestamp = await fetchGlobalFirstEdit(cleanUsername);
 
+      // ✅ Fetch heatmap data
+      const heatmapData = await fetchHeatmapReal(cleanUsername);
+
       // ✅ Step 3: Compute mood
       const mood = getUserMood({
         editCount: totalEdits,
@@ -82,6 +87,7 @@ function App() {
         topPages: topEdits.slice(0, 5),
         recentEdits,
         mood,
+        heatmapData,
       };
 
       setUserData(formatted);
@@ -94,71 +100,71 @@ function App() {
     setLoading(false);
   };
 
-return (
-  <>
-    <div className=" min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 px-4">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.96 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.4 }}
-        className=" mt-2 md:mt-8 w-full max-w-2xl bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-6 md:p-8"
-      >
-        {/* Header */}
-        <header className="flex items-center gap-3 mb-6 border-b pb-3 border-gray-200 dark:border-gray-700">
-          <img
-            src="/wiki_profile_logo.svg"
-            alt="Wiki Profile Logo"
-            className="w-10 h-10"
-          />
-          <h1 className="text-2xl font-serif font-bold text-[#0063bf] tracking-tight">
-            Wiki<span className="text-black dark:text-white">Profile</span>
-          </h1>
-          <span className="ml-auto text-xs text-gray-400 font-mono hidden sm:block">
-            powered by Wikimedia
-          </span>
-        </header>
+  return (
+    <>
+      <div className=" min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 px-4">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.96 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.4 }}
+          className=" mt-2 md:mt-8 w-full max-w-2xl bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-6 md:p-8"
+        >
+          {/* Header */}
+          <header className="flex items-center gap-3 mb-6 border-b pb-3 border-gray-200 dark:border-gray-700">
+            <img
+              src="/wiki_profile_logo.svg"
+              alt="Wiki Profile Logo"
+              className="w-10 h-10"
+            />
+            <h1 className="text-2xl font-serif font-bold text-[#0063bf] tracking-tight">
+              Wiki<span className="text-black dark:text-white">Profile</span>
+            </h1>
+            <span className="ml-auto text-xs text-gray-400 font-mono hidden sm:block">
+              powered by Wikimedia
+            </span>
+          </header>
 
-        {/* Title */}
-        <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-800 dark:text-white mb-6">
-          Quick Wiki Profile Card
-        </h2>
+          {/* Title */}
+          <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-800 dark:text-white mb-6">
+            Quick Wiki Profile Card
+          </h2>
 
-        {/* Search */}
-        <UserInput onFetch={fetchData} />
+          {/* Search */}
+          <UserInput onFetch={fetchData} loading={loading} />
 
-        {/* Loading */}
-        {loading && (
-          <div className="flex justify-center items-center mt-6 animate-fadeIn">
-            <div className="w-6 h-6 border-4 border-[#0063bf] border-t-transparent rounded-full animate-spin mr-2"></div>
-            <span className="text-sm text-[#0063bf] font-medium">Fetching profile...</span>
-          </div>
-        )}
-
-        {/* Error */}
-        {error && (
-          <p className="text-red-500 text-center mt-4 animate-fadeIn">{error}</p>
-        )}
         
-        {/* ProfileCard */}
-        {!loading && userData && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            className="mt-6 w-full flex flex-col items-center"
-          >
-            <ProfileCard data={userData} />
-          </motion.div>
-        )}
 
-      </motion.div>
-    </div>
+          {/* Error */}
+          {error && (
+            <p className="text-red-500 text-center mt-4 animate-fadeIn">{error}</p>
+          )}
 
-    {/* Footer */}
-    <footer className="text-xs py-4 text-center bg-gray-50 dark:bg-gray-900 text-gray-400">
-      Made with ❤️ using Wikimedia APIs. © {new Date().getFullYear()} The Open Draft
-    </footer>
-  </>
-);
+          {/* ProfileCard */}
+          {!loading && userData && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+              className="mt-6 w-full flex flex-col items-center"
+            >
+              <ProfileCard data={userData} />
+              {/* Render Heatmap below the profile card */}
+              {userData.heatmapData && (
+                <div className="w-full mt-8">
+                  <Heatmap data={userData.heatmapData} />
+                </div>
+              )}
+            </motion.div>
+          )}
+
+        </motion.div>
+      </div>
+
+      {/* Footer */}
+      <footer className="text-xs py-4 text-center bg-gray-50 dark:bg-gray-900 text-gray-400">
+        Made with ❤️ using Wikimedia APIs. © {new Date().getFullYear()} The Open Draft
+      </footer>
+    </>
+  );
 }
 export default App;

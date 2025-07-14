@@ -48,8 +48,8 @@ const xtoolsProjects = [
   "te.wikipedia.org",
   "ur.wikipedia.org",
   "wikidata.org",
-  "wikimania.wikimedia.org"
-
+  "wikimania.wikimedia.org",
+  "www.wikidata.org"
   
 ];
 

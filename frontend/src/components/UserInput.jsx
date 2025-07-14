@@ -18,7 +18,7 @@ function useClickOutside(ref, handler) {
   }, [ref, handler]);
 }
 
-function UserInput({ onFetch }) {
+function UserInput({ onFetch, loading }) {
   const [username, setUsername] = useState("");
   const [error, setError] = useState(""); // State for error messages
   const [autocompleteList, setAutocompleteList] = useState([]); // For real-time suggestions
@@ -133,16 +133,26 @@ function UserInput({ onFetch }) {
           </button>
         )}
         <button
-          onClick={handleSubmit}
-          className="ml-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-        >
-          Fetch
-        </button>
+    onClick={handleSubmit}
+    className="ml-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center justify-center min-w-[80px]"
+    disabled={loading}
+  >
+    {loading ? (
+      <span className="flex items-center">
+        <svg className="animate-spin h-5 w-5 mr-2 text-white" viewBox="0 0 24 24">
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"/>
+          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8h4z"/>
+        </svg>
+      </span>
+    ) : (
+      "Fetch"
+    )}
+  </button>
       </div>
 
       {/* Real-time autocomplete suggestions */}
       {autocompleteList.length > 0 && (
-        <ul className="bg-gray-800 border border-gray-500 rounded-lg  shadow absolute z-10 max-h-48 overflow-y-auto scrollbar-hide w-auto p-0 ">
+        <ul className="bg-gray-200 dark:bg-gray-800 border border-gray-500 rounded-lg  shadow absolute z-10 max-h-48 overflow-y-auto scrollbar-hide w-auto p-0 ">
           {autocompleteList.map((name, index) => (
             <li
               key={name}

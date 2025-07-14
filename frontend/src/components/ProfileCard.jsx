@@ -1,3 +1,5 @@
+import Heatmap from "./Heatmap";
+
 function ProfileCard({ data }) {
   return (
     <div className="bg-gray-100 justify-content-center items-center shadow-xl rounded-2xl p-6 w-full  border-gray-100 transition-all">
@@ -32,7 +34,6 @@ function ProfileCard({ data }) {
 
       {/* Edit Metadata */}
       <div className="flex flex-col md:grid md:grid-cols-2 gap-4 my-4">
-
         <div className="bg-[#0063bf0d] p-4 rounded-lg text-center">
           <p className="text-gray-600 text-sm">Global Edits</p>
           <p className="text-xl font-bold text-[#0063bf] break-words">
@@ -48,16 +49,13 @@ function ProfileCard({ data }) {
         </div>
       </div>
 
-
-
-
       {/* Recent Edits */}
       {data.project === "global" ? (
         <p className="mt-4 text-sm text-gray-500 italic">
           🔕 No per-project recent edits available in global mode.
         </p>
       ) : (
-        <div className="mt-4 bg-white dark:bg-gray-200 p-4 rounded-lg shadow-sm">
+        <div className=" bg-white dark:bg-gray-200 p-4 rounded-lg shadow-sm">
           <h3 className="text-sm font-semibold text-gray-600 mb-1">
             🕒 Recent Edits
           </h3>
@@ -96,7 +94,7 @@ function ProfileCard({ data }) {
           <h3 className="text-sm font-semibold text-gray-600 mb-1">
             📚 Top Edited Articles
           </h3>
-          <ul className="list-disc space-y-2 text-sm">
+          <ul className=" space-y-2 text-sm">
             {data.topPages.map((page, i) => (
               <li key={i}>
                 <a
@@ -107,12 +105,10 @@ function ProfileCard({ data }) {
                 >
                   {page.title}
                 </a>{" "}
-                —{" "}
-                <span className="text-[#339966] text-sm">
-                  {page.count} edits
-                </span>{" "}
+                - {" "}
+                
                 <span
-                  className={` inline-block text-xs px-2 py-0.5 rounded-full font-semibold ${page.class === "B"
+                  className={`float-right inline-block text-xs px-2 py-0.5 rounded-full ml-2 font-semibold ${page.class === "B"
                     ? "bg-wmgreen text-white"
                     : page.class === "C"
                       ? "bg-yellow-500 text-black"
@@ -124,9 +120,20 @@ function ProfileCard({ data }) {
                 >
                   {page.class}
                 </span>
+                {" "}
+                <span className=" text-[#339966] float-right text-sm">
+                  {page.count} edits
+                </span>
               </li>
             ))}
           </ul>
+        </div>
+      )}
+
+      {/* Heatmap */}
+      {data.heatmapData && data.heatmapData.length > 0 && (
+        <div className="mt-6">
+          <Heatmap contributions={data.heatmapData} />
         </div>
       )}
     </div>

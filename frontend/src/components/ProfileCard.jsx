@@ -74,7 +74,7 @@ function ProfileCard({ data }) {
                   <div className="text-xs text-gray-500">
                     ({new Date(edit.timestamp).toLocaleString()})
                   </div>
-                  <div className="text-xs text-gray-600 italic mt-0.5">
+                  <div className="text-xs text-gray-600 italic mt-0.5 text-wrap break-words">
                     {edit.comment?.trim()
                       ? edit.comment
                       : "No edit summary provided"}

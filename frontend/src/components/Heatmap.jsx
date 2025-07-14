@@ -14,16 +14,16 @@ function Heatmap({ contributions }) {
         {/* Color reference legend */}
         <div className="flex items-center gap-2 text-xs text-gray-600 italic mt-0.5">
           <span>Less</span>
-          <span className="w-3 h-3 rounded-sm border border-gray-300 bg-gray-200 inline-block color-empty"></span>
-          <span className="w-3 h-3 rounded-sm border border-gray-300 bg-green-100 inline-block color-github-1"></span>
-          <span className="w-3 h-3 rounded-sm border border-gray-300 bg-green-300 inline-block color-github-2"></span>
-          <span className="w-3 h-3 rounded-sm border border-gray-300 bg-green-500 inline-block color-github-3"></span>
-          <span className="w-3 h-3 rounded-sm border border-gray-300 bg-green-700 inline-block color-github-4"></span>
+          <span className="w-3 h-3 rounded-sm border border-gray-400 bg-gray-200 inline-block color-empty"></span>
+          <span className="w-3 h-3 rounded-sm border border-gray-400 bg-lime-200 inline-block color-github-1"></span>
+          <span className="w-3 h-3 rounded-sm border border-gray-400 bg-green-300 inline-block color-github-2"></span>
+          <span className="w-3 h-3 rounded-sm border border-gray-400 bg-green-500 inline-block color-github-3"></span>
+          <span className="w-3 h-3 rounded-sm border border-gray-400 bg-green-700 inline-block color-github-4"></span>
           <span>More</span>
         </div>
       </div>
       {/* Responsive scroll for heatmap */}
-      <div className="w-full overflow-x-auto pb-2">
+      <div className="w-full overflow-x-auto pb-2 scrollbar-hide">
         <div className="min-w-[600px] max-w-full">
           <CalendarHeatmap
             startDate={new Date(new Date().setFullYear(new Date().getFullYear() - 1))}

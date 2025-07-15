@@ -23,7 +23,7 @@ function Heatmap({ contributions }) {
         </div>
       </div>
       {/* Responsive scroll for heatmap */}
-      <div className="w-full overflow-x-auto pb-2 scrollbar-hide">
+      <div className="w-full  overflow-x-auto pb-2 scrollbar-hide">
         <div className="min-w-[600px] max-w-full">
           <CalendarHeatmap
             startDate={new Date(new Date().setFullYear(new Date().getFullYear() - 1))}

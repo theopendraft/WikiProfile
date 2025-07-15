@@ -37,7 +37,7 @@ function ProfileCard({ data }) {
         <div className="bg-[#0063bf0d] p-4 rounded-lg text-center">
           <p className="text-gray-600 text-sm">Global Edits</p>
           <p className="text-xl font-bold text-[#0063bf] break-words">
-            {data.totalEdits}
+            {data.totalEdits}*
           </p>
         </div>
 

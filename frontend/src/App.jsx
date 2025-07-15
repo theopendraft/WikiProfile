@@ -102,7 +102,7 @@ function App() {
 
   return (
     <>
-      <div className=" min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 px-4">
+      <div className="flex-col min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 px-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -158,12 +158,14 @@ function App() {
           )}
 
         </motion.div>
-      </div>
-
-      {/* Footer */}
+          {/* Footer */}
       <footer className="text-xs py-4 text-center bg-gray-50 dark:bg-gray-900 text-gray-400">
         Made with ❤️ using Wikimedia APIs. © {new Date().getFullYear()} The Open Draft
       </footer>
+
+      </div>
+
+      
     </>
   );
 }

@@ -165,7 +165,7 @@ function UserInput({ onFetch, loading }) {
 
       {/* Autocomplete suggestions */}
       {autocompleteList.length > 0 && (
-        <ul className="absolute z-10 w-full max-w-md bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+        <ul className="absolute z-10 w-auto max-w-md bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg max-h-48 overflow-y-auto">
           {autocompleteList.map((name, index) => (
             <li
               key={name}

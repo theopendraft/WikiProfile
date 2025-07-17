@@ -6,7 +6,7 @@ function Heatmap({ contributions }) {
   if (!contributions?.length) return null;
 
   return (
-    <div className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg shadow-sm">
+    <div className="bg-white dark:bg-gray-800 p-4  sm:p-6 rounded-lg shadow-sm">
       <div className="flex items-center justify-between mb-4 flex-wrap gap-4">
         <h2 className="text-sm font-semibold text-gray-700 dark:text-gray-200">
           🗓️ Edit Activity (Last 500)
@@ -23,7 +23,7 @@ function Heatmap({ contributions }) {
         </div>
       </div>
       {/* Responsive scroll for heatmap */}
-      <div className="w-full  overflow-x-auto pb-2 ">
+      <div className="w-full  overflow-x-auto pb-2 scrollbar-hide ">
         <div className="min-w-[800px] max-w-full">
           <CalendarHeatmap
             startDate={new Date(new Date().setFullYear(new Date().getFullYear() - 1))}

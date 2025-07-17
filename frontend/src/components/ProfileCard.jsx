@@ -122,7 +122,7 @@ function ProfileCard({ data }) {
                   >
                     {page.class}
                   </span>
-                  <span className="text-green-600 dark:text-green-300">
+                  <span className="text-green-600 rounded-lg dark:text-green-300">
                     {page.count} edits
                   </span>
                 </div>
@@ -134,7 +134,7 @@ function ProfileCard({ data }) {
 
       {/* Heatmap */}
       {data.heatmapData?.length > 0 && (
-        <div className="mt-6 border border-gray-200 dark:border-gray-700">
+        <div className="mt-6 rounded-lg border border-gray-200 dark:border-gray-700">
           <Heatmap contributions={data.heatmapData} />
         </div>
       )}

@@ -2,7 +2,7 @@
 
 > Generate beautiful and informative profile cards for Wikipedia editors using Wikimedia APIs — powered by React, Tailwind CSS, and Vercel.
 
-🚀 **Live Demo:** [quick-wiki-profile-card-fnim.vercel.app](https://quick-wiki-profile-card-fnim.vercel.app)
+🚀 **Live Demo:** [wikiprofile.vercel.app](https://wikiprofile.vercel.app)
 
 ---
 
